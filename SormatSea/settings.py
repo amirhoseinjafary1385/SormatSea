@@ -1,6 +1,4 @@
 import os
-
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,15 +28,27 @@ BANK_MELLI_PAYMENT_URL = "https://bankmelli.com/pg/StartPay"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.facebook",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    #"marketplace",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    'marketplace.apps.MarketplaceConfig'
-
+    "marketplace.apps.MarketplaceConfig"
+    
 ]
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
 
 # Redirect after users
 LOGIN_REDIRECT_URL = "nft_list"
@@ -55,6 +65,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "SormatSea.urls"

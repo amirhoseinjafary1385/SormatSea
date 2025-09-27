@@ -1,5 +1,7 @@
 {% extends 'marketplace/base.html' %}
 {% load static %}
+{% load socialaccount %}  {# Add this line for social login #}
+
 {% block title %}Login - SormatSea.io{% endblock %}
 
 {% block content %}
@@ -76,9 +78,10 @@
                                 Remember me
                             </label>
                         </div>
-                        <a href="{% url 'password_reset' %}" class="text-decoration-none small">
+                        {# Remove or comment out password reset if not configured #}
+                        {# <a href="{% url 'password_reset' %}" class="text-decoration-none small">
                             Forgot password?
-                        </a>
+                        </a> #}
                     </div>
 
                     <div class="d-grid gap-2">
@@ -91,39 +94,50 @@
                     </div>
                 </form>
 
-                <div class="text-center mt-4">
-                    <p class="mb-2 text-muted">Or login with</p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="#" class="btn btn-outline-danger">
-                            <i class="fab fa-google"></i> Google
-                        </a>
-                        <a href="#" class="btn btn-outline-primary">
-                            <i class="fab fa-facebook-f"></i> Facebook
-                        </a>
-                    </div>
+                {# Social login section - comment out if not configured #}
+                {% comment %}
+                <hr class="my-4">
+                <div class="text-center mb-3">
+                    <span class="text-muted">Or login with</span>
                 </div>
+                <div class="social-login d-grid gap-2">
+                    {% if 'google' in backends.backends %}
+                    <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger">
+                        <i class="fab fa-google me-2"></i> Google
+                    </a>
+                    {% endif %}
+                    
+                    {% if 'facebook' in backends.backends %}
+                    <a href="{% provider_login_url 'facebook' %}" class="btn btn-primary">
+                        <i class="fab fa-facebook-f me-2"></i> Facebook
+                    </a>
+                    {% endif %}
+                </div>
+                {% endcomment %}
+
             </div>
         </div>
     </div>
-
 </div>
+{% endblock %}
 
 {% block extra_js %}
 <script>
 // Toggle password visibility
-document.querySelectorAll('.toggle-password').forEach(button => {
-    button.addEventListener('click', function() {
-        const input = this.previousElementSibling;
-        const icon = this.querySelector('i');
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const icon = this.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
     });
 });
 </script>
-{% endblock %}
 {% endblock %}

@@ -1,0 +1,45 @@
+<div class="nft-collection-section">
+    <div class="section-header mb-5">
+        <h2 class="section-title">TON Blockchain NFTs</h2>
+        <p class="section-subtitle">Exclusive digital collectibles on The Open Network</p>
+    </div>
+
+    <div class="nft-grid">
+        {% for nft in nfts %}
+        <div class="nft-card">
+            <div class="nft-image-container">
+                <img src="{{ nft.image.url }}" 
+                     alt="{{ nft.title }}" class="nft-image">
+                <div class="nft-overlay">
+                    <div class="nft-actions">
+                        <a href="{% url 'nft_detail' slug=nft.slug %}" class="btn btn-primary btn-sm">View</a>
+                        <button class="btn btn-outline-light btn-sm">Buy</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nft-details">
+                <h5 class="nft-title">{{ nft.title }}</h5>
+                <p class="nft-creator">By @{{ nft.owner.username }}</p>
+                <div class="nft-price">
+                    <span class="price-amount">
+                        {% if nft.ton_price %}
+                            {{ nft.ton_price }} TON
+                        {% else %}
+                            {{ nft.price }} ETH
+                        {% endif %}
+                    </span>
+                    <span class="price-usd">≈ ${{ nft.price }}</span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="empty-state">
+                <i class="bi bi-image display-1 text-muted"></i>
+                <h4>No TON NFTs Available</h4>
+                <p class="text-muted">Check back later for new TON blockchain collections</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

@@ -29,6 +29,10 @@
                             {{ item.nft.title }}
                         </a>
                         <div class="text-muted small mt-1">دسته: {{ item.nft.category.name }}</div>
+                        <div class="text-muted small mt-1">سازنده: {{ item.nft.creator.username }}</div>
+                        {% if item.nft.collection %}
+                          <div class="text-muted small mt-1">کالکشن: {{ item.nft.collection.name }}</div>
+                        {% endif %}
                     </td>
                     <td>
                         <div class="d-flex justify-content-center align-items-center">

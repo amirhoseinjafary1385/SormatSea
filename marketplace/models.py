@@ -5,17 +5,6 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.validators import MinValueValidator
 
-# from .models import NFT
-
-class Subcategory(models.Model):
-    category = models.ForeignKey('marketplace.Category', on_delete=models.CASCADE, related_name='subcategories')
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
-
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(null=True, blank=True)
@@ -35,25 +24,56 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Subcategory(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class NFT(models.Model):
+    BLOCKCHAIN_CHOICES = [
+        ('TON', 'TON Blockchain'),
+        ('ETH', 'Ethereum'),
+        ('POLY', 'Polygon'),
+        ('BSC', 'Binance Smart Chain'),
+    ]
+
     name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
     description = models.TextField()
-    image = models.ImageField(upload_to="nft_images/", blank=True, null=True)
-    price_irt = models.ForeignKey(Category, on_delete=models.CASCADE)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    price_polygon = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
-    slug = models.SlugField(unique=True, blank=True)
+    image = models.ImageField(upload_to='nfts/')
+    price_irt = models.DecimalField(max_digits=12, decimal_places=2)
+    price_polygon = models.DecimalField(max_digits=12, decimal_places=2)
+    # New optional fields for ownership and creator metadata
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='owned_nfts')
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_nfts')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    blockchain = models.CharField(max_length=20, choices=BLOCKCHAIN_CHOICES, default="TON")  # ✅ Default TON
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return self.name
 
+    @property
+    def title(self):
+        return self.name
+
+    @property
+    def price(self):
+        # default price property used by templates and cart code
+        try:
+            return self.price_irt
+        except Exception:
+            return self.price_polygon or 0
+
+    @property
+    def currency(self):
+        return 'IRT'
 
 class Cart(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -63,7 +83,6 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"Cart for {self.user.username}"
-
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
@@ -79,36 +98,19 @@ class CartItem(models.Model):
         ordering = ["-added_at"]
         verbose_name = "Cart Item"
         verbose_name_plural = "Cart Items"
-        db_table = "marketplace_cart_items"
-        indexes = [
-            models.Index(fields=["cart"]),
-            models.Index(fields=["nft"]),
-            models.Index(fields=["added_at"]),
-            models.Index(fields=["added_at", "cart"]),
-            models.Index(fields=["updated_at"]),
-        ]
-        constraints = [
-            models.CheckConstraint(
-                check=models.Q(quantity__gte=0), name="positive_quantity"
-            ),
-        ]
 
     def __str__(self):
         return f"{self.quantity} x {self.nft.title}"
 
     @property
     def subtotal(self):
-        return self.qiuantity * self.nft.price
-
-    @property
-    def total_price(self):
         return self.quantity * (self.unit_price or self.nft.price)
 
     def save(self, *args, **kwargs):
         if not self.unit_price:
+            # ensure unit_price uses the compatible price property
             self.unit_price = self.nft.price
         super().save(*args, **kwargs)
-
 
 class Transaction(models.Model):
     TRANSACTION_TYPES = [

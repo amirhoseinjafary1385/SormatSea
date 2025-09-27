@@ -1,0 +1,193 @@
+{% extends "marketplace/base.html" %}
+{% load static %}
+
+{% block title %}Connect Wallet - SormatSea{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">Connect Your Wallet</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Wallet Selection Section -->
+                    <div class="wallet-options">
+                        <h5 class="text-center mb-4">Choose your wallet</h5>
+                        
+                        <!-- Tonkeeper Wallet Option -->
+                        <div class="wallet-item card mb-3" data-wallet="tonkeeper" style="cursor: pointer;">
+                            <div class="card-body text-center">
+                                <img src="{% static 'images/tonkeeper-logo.png' %}" 
+                                     alt="Tonkeeper Wallet" 
+                                     class="wallet-logo mb-3" 
+                                     style="width: 80px; height: 80px;">
+                                <h5 class="card-title">Tonkeeper</h5>
+                                <p class="card-text text-muted">Secure TON blockchain wallet</p>
+                            </div>
+                        </div>
+
+                        <!-- MetaMask Wallet Option -->
+                        <div class="wallet-item card mb-3" data-wallet="metamask" style="cursor: pointer;">
+                            <div class="card-body text-center">
+                                <img src="{% static 'images/metamask-logo.png' %}" 
+                                     alt="MetaMask Wallet" 
+                                     class="wallet-logo mb-3" 
+                                     style="width: 80px; height: 80px;">
+                                <h5 class="card-title">MetaMask</h5>
+                                <p class="card-text text-muted">Ethereum wallet browser extension</p>
+                            </div>
+                        </div>
+
+                        <!-- Trust Wallet Option -->
+                        <div class="wallet-item card mb-3" data-wallet="trustwallet" style="cursor: pointer;">
+                            <div class="card-body text-center">
+                                <img src="{% static 'images/trustwallet-logo.png' %}" 
+                                     alt="Trust Wallet" 
+                                     class="wallet-logo mb-3" 
+                                     style="width: 80px; height: 80px;">
+                                <h5 class="card-title">Trust Wallet</h5>
+                                <p class="card-text text-muted">Multi-chain mobile wallet</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Connection Status -->
+                    <div class="connection-status mt-4 text-center">
+                        <div id="walletText" class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> Please select a wallet to connect
+                        </div>
+                        <div id="walletAddress" class="alert alert-success d-none">
+                            <i class="fas fa-check-circle"></i> Connected: <span id="connectedAddress"></span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="text-center mt-4">
+                        <button id="disconnectBtn" class="btn btn-outline-danger d-none">
+                            <i class="fas fa-plug"></i> Disconnect Wallet
+                        </button>
+                        <a href="{% url 'nft_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Marketplace
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+.wallet-item:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.wallet-logo {
+    object-fit: contain;
+}
+.connection-status {
+    min-height: 80px;
+}
+</style>
+{% endblock %}
+{% block extra_css %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const walletText = document.getElementById('walletText');
+    const walletAddress = document.getElementById('walletAddress');
+    const connectedAddress = document.getElementById('connectedAddress');
+    const disconnectBtn = document.getElementById('disconnectBtn');
+    const walletItems = document.querySelectorAll('.wallet-item');
+
+    // Handle wallet selection
+    walletItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const walletType = this.getAttribute('data-wallet');
+            connectWallet(walletType);
+        });
+    });
+
+    function connectWallet(walletType) {
+        walletText.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Connecting to ${walletType}...`;
+        
+        setTimeout(() => {
+            switch(walletType) {
+                case 'tonkeeper':
+                    simulateTonkeeperConnection();
+                    break;
+                case 'metamask':
+                    simulateMetaMaskConnection();
+                    break;
+                case 'trustwallet':
+                    simulateTrustWalletConnection();
+                    break;
+                default:
+                    walletText.innerHTML = `<i class="fas fa-times-circle"></i> Wallet not supported`;
+            }
+        }, 2000);
+    }
+
+    // Tonkeeper connection 
+    function simulateTonkeeperConnection() {
+        const fakeAddress = "EQD...TonkeeperAddress123";
+        walletText.classList.add('d-none');
+        walletAddress.classList.remove('d-none');
+        connectedAddress.textContent = fakeAddress;
+        disconnectBtn.classList.remove('d-none');
+        
+        // Store connection in localStorage
+        localStorage.setItem('connectedWallet', 'tonkeeper');
+        localStorage.setItem('walletAddress', fakeAddress);
+    }
+
+    function simulateMetaMaskConnection() {
+        const fakeAddress = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
+        walletText.classList.add('d-none');
+        walletAddress.classList.remove('d-none');
+        connectedAddress.textContent = fakeAddress;
+        disconnectBtn.classList.remove('d-none');
+        
+        localStorage.setItem('connectedWallet', 'metamask');
+        localStorage.setItem('walletAddress', fakeAddress);
+    }
+
+    function simulateTrustWalletConnection() {
+        const fakeAddress = "bnb136ns6lfw4zs5hg4n85vdthaad7hq5m4gtkgf23";
+        walletText.classList.add('d-none');
+        walletAddress.classList.remove('d-none');
+        connectedAddress.textContent = fakeAddress;
+        disconnectBtn.classList.remove('d-none');
+        
+        localStorage.setItem('connectedWallet', 'trustwallet');
+        localStorage.setItem('walletAddress', fakeAddress);
+    }
+
+    disconnectBtn.addEventListener('click', function() {
+        localStorage.removeItem('connectedWallet');
+        localStorage.removeItem('walletAddress');
+        walletAddress.classList.add('d-none');
+        disconnectBtn.classList.add('d-none');
+        walletText.classList.remove('d-none');
+        walletText.innerHTML = '<i class="fas fa-info-circle"></i> Wallet disconnected. Please select a wallet to connect';
+    });
+
+    // Check if already connected
+    const connectedWallet = localStorage.getItem('connectedWallet');
+    if (connectedWallet) {
+        const address = localStorage.getItem('walletAddress');
+        walletText.classList.add('d-none');
+        walletAddress.classList.remove('d-none');
+        connectedAddress.textContent = address;
+        disconnectBtn.classList.remove('d-none');
+    }
+});
+</script>
+
+{% endblock %}

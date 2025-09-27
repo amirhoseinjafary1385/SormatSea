@@ -1,31 +1,22 @@
-{% extends "marketplace/base.html" %}
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Categories - SormatSea{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category List</title>
-</head>
-<body>
+<div class="container mt-4">
+  <h1 class="mb-3">Categories</h1>
+  {% if categories %}
     <div class="list-group">
-        {% for category in categories %}
-        <a href="{% url 'category_detail' category.id %}" class="list-group-item list-group-item-action" aria-label="View {{ category.name }}">
-            {{ category.name }}
+      {% for category in categories %}
+        <a href="{% url 'category_detail' category.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+          <span>{{ category.name }}</span>
+          <span class="badge bg-secondary rounded-pill">{{ category.nft_set.count }}</span>
         </a>
-        <a href="{% url 'category_detail' 1 %}" class="list-group-item list-group-item-action" aria-label="View NFT Art">
-            NFT Art
-        </a>
-        <a href="{% url 'category_detail' 2 %}" class="list-group-item list-group-item-action" aria-label="View NFT Music">
-            NFT Music
-        </a>
-        <a href="{% url 'category_detail' 3 %}" class="list-group-item list-group-item-action" aria-label="View NFT Collectibles">
-            NFT Collectibles
-        </a>
-
-        {% endfor %}
+      {% endfor %}
     </div>
-</body>
-</html>
+  {% else %}
+    <div class="alert alert-info">The Category Doesn't exit! <a href="{% url 'nft_create' %}">Create one</a> or check back later.</div>
+  {% endif %}
+</div>
 {% endblock %}
+ 

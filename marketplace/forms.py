@@ -1,14 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import get_user_model
 from .models import NFT, Category
-from django.contrib.auth import login
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 
-
-class BootstrapFormMixining:
-
+class BootstrapFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
@@ -20,28 +16,26 @@ class BootstrapFormMixining:
             elif isinstance(widget, forms.FileInput):
                 css_classes.append('form-control')
             else:
-                defalut_class = 'form-control'
-                css_classes.append(defalut_class)
+                default_class = 'form-control'
+                css_classes.append(default_class)
                 
             widget.attrs['class'] = ' '.join(css_classes).strip()
 
-
-class RegisterForm(BootstrapFormMixining, UserCreationForm):
+class RegisterForm(BootstrapFormMixin, UserCreationForm):
     username = forms.CharField(
-
         max_length=150, 
         label="Username",
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter username'})
     )
-    firstname = forms.CharField(
+    first_name = forms.CharField(
         max_length=50, 
-        label="Firstname",
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter firstname'})
+        label="First Name",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter first name'})
     )
-    lastname = forms.CharField(
+    last_name = forms.CharField(
         max_length=50, 
-        label="Lastname",
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter lastname'})
+        label="Last Name",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter last name'})
     )
     email = forms.EmailField(
         label="Email", 
@@ -75,7 +69,7 @@ class RegisterForm(BootstrapFormMixining, UserCreationForm):
             'max': 999999,
             'id': 'user_id',
             'oninput': 'calculatePrice()',
-            'onchanege': 'calculatePrice()',
+            'onchange': 'calculatePrice()',
             'style': 'width: 100%;',
             'autocomplete': 'off'
         })
@@ -83,33 +77,42 @@ class RegisterForm(BootstrapFormMixining, UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'email', 'country', 'city', 'password1', 'password2']
 
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(label = "Username or Email")
-    remember_me = forms.BooleanField(required = False, widget = forms.CheckboxInput())
+class LoginForm(BootstrapFormMixin, AuthenticationForm):
+    username = forms.CharField(label="Username or Email")
+    remember_me = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
     class Meta:
-        fields = ['username', 'password', 'remember_me', 'email', 'login_token']
+        fields = ['username', 'password', 'remember_me']
 
-class NFTForm(forms.ModelForm):
-
+class NFTForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = NFT
+        # Use the actual field names from your NFT model
         fields = ['name', 'description', 'image', 'price_irt', 'price_polygon']
-
         
         widgets = {
-            'price_irt': forms.NumberInput(attrs={'placeholder': 'Price in Toman (IRT)'}),
-            'price_polygon': forms.NumberInput(attrs={'placeholder': 'Price in Polygon (MATIC)'}),
+            'name': forms.TextInput(attrs={'placeholder': 'NFT Name'}),  # Changed from title to name
+            'description': forms.Textarea(attrs={'placeholder': 'NFT Description', 'rows': 3}),
+            'image': forms.FileInput(attrs={'placeholder': 'Upload NFT Image'}),
+            'price_irt': forms.NumberInput(attrs={'placeholder': 'Price in IRT', 'step': '0.01'}),
+            'price_polygon': forms.NumberInput(attrs={'placeholder': 'Price in Polygon (MATIC)', 'step': '0.01'}),
         }
-
 
         labels = {
-            'title': "NFT Title",
+            'name': "NFT Name",  # Changed from title to name
             'description': "Description",
             'image': "NFT Image",
-            'category': "Category",
-            'price': "Price (in ETH)"
+            'price_irt': "Price (IRT)",
+            'price_polygon': "Price (MATIC)"
         }
 
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Category Name'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Category Description', 'rows': 3}),
+        }

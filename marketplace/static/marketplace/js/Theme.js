@@ -23,7 +23,7 @@ window.addEventListener('load', () => {
 function toggleTheme() {
     const body = document.body;
     const icon = document.getElementById('theme-icon');
-
+    
     body.classList.toggle('dark-theme');
     if (body.classList.contains('dark-theme')) {
         localStorage.setItem('theme', 'dark');
