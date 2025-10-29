@@ -1,8 +1,11 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from . import views
 from . import cart
 from .views import ProductView
 
+
+app_name = 'marketplace'  # Add this line to enable URL namespacing
 
 urlpatterns = [
     path('ton-nft/', views.ton_nft_collection, name='ton_nft_collection'),
@@ -35,8 +38,10 @@ urlpatterns = [
     path("categories/", views.category_list, name="category_list"),
     path("category/<int:category_id>/", views.category_detail, name="category_detail"),  # Changed to int
     
-    # User registration
+    # User registration and authentication
     path("register/", views.register_view, name="register"),
+    path("login/", auth_views.LoginView.as_view(template_name='marketplace/login.html'), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(next_page='marketplace:nft_list'), name="logout"),
     
     # Payment flow
     path("payment/initiate/<int:nft_id>/", views.initiate_payment, name="initiate_payment"),

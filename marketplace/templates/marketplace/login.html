@@ -60,8 +60,8 @@
                                    name="{{ form.password.name }}"
                                    placeholder="Enter your password"
                                    required>
-                            <button class="btn btn-outline-secondary toggle-password" type="button">
-                                <i class="fas fa-eye"></i>
+                            <button class="btn btn-outline-secondary toggle-password" type="button" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye" aria-hidden="true"></i>
                             </button>
                             {% if form.password.errors %}
                                 <div class="invalid-feedback">
@@ -127,7 +127,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', function() {
-            const input = this.previousElementSibling;
+            const input = this.closest('.input-group').querySelector('input[type="password"], input[type="text"]');
             const icon = this.querySelector('i');
             if (input.type === 'password') {
                 input.type = 'text';

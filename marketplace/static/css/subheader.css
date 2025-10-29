@@ -1,0 +1,50 @@
+.Subheader__list {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 16px;
+    background: var(--header-bg, #ffffff);
+    border-bottom: 1px solid var(--border-color, #e5e5e5);
+}
+
+.LibraryButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.LibraryButton:hover {
+    background-color: var(--button-hover-bg, rgba(0, 0, 0, 0.05));
+}
+
+.LibraryButton--active {
+    background-color: var(--button-active-bg, rgba(0, 0, 0, 0.1));
+}
+
+.LibraryButton__inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.LibraryButton__before svg {
+    width: 20px;
+    height: 20px;
+    color: var(--icon-color, currentColor);
+}
+
+.LibraryButton__text {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-color, #000000);
+}
+
+.AppLink {
+    text-decoration: none;
+    color: inherit;
+}

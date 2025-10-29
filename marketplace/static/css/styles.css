@@ -1,0 +1,15 @@
+.navbar-brand svg {
+    transition: transform 0.3s ease;
+    color: #4ecca3;
+}
+
+.navbar-brand:hover svg {
+    transform: scale(1.1);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}

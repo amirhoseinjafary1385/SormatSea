@@ -50,34 +50,18 @@ class RegisterForm(BootstrapFormMixin, UserCreationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm password'}),
         label="Confirm Password"
     )
-    country = forms.CharField(
-        max_length=120, 
-        label="Country | کشور",
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter country'})
-    )
-    city = forms.CharField(
-        max_length=120, 
-        label="City | شهر",
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter city'})
-    )
-    user_id = forms.IntegerField(
-        label="ID",
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Enter ID',
-            'min': 1,
-            'max': 999999,
-            'id': 'user_id',
-            'oninput': 'calculatePrice()',
-            'onchange': 'calculatePrice()',
-            'style': 'width: 100%;',
-            'autocomplete': 'off'
-        })
-    )
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'country', 'city', 'password1', 'password2']
+        # Removed country, city and user_id fields per request
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password1',
+            'password2',
+        ]
 
 class LoginForm(BootstrapFormMixin, AuthenticationForm):
     username = forms.CharField(label="Username or Email")

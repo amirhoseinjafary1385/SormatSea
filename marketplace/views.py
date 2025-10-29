@@ -35,7 +35,7 @@ def nft_create(request):
         form = NFTForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('nft_list')
+            return redirect('marketplace:nft_list')
     else:
         form = NFTForm()
     return render(request, 'nft_create.html', {'form': form})
@@ -46,7 +46,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')
+            return redirect('marketplace:nft_list')
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
