@@ -1,34 +1,314 @@
 {% extends 'marketplace/base.html' %}
 {% load static %}
-{% load socialaccount %}  {# Add this line for social login #}
+{% load socialaccount %}
 
 {% block title %}Login - SormatSea.io{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6 col-lg-4">
+<style>
+/* === Body and Card Styles === */
+body {
+    background: linear-gradient(135deg, #0d0d20, #02010a, #1a0033, #000010);
+    background-size: 400% 400%;
+    animation: breatheBG 15s ease infinite;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: #e0e0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+}
+
+@keyframes breatheBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.card {
+    background: rgba(20,20,40,0.4);
+    border: 1px solid rgba(180,0,255,0.2);
+    border-radius: 18px;
+    box-shadow: 0 0 25px rgba(0,255,255,0.15), inset 0 0 15px rgba(180,0,255,0.1);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    width: 100%;
+    max-width: 400px;
+    transition: all 0.4s ease;
+}
+
+/* === Neon Header === */
+.card-header h4 {
+    color: #00f6ff;
+    text-shadow:
+        0 0 5px #00f6ff,
+        0 0 10px #00f6ff,
+        0 0 20px #00f6ff,
+        0 0 40px #b400ff,
+        0 0 60px #b400ff;
+    animation: neonGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes neonGlow {
+    0% {
+        text-shadow: 0 0 2px #00f6ff, 0 0 5px #00f6ff, 0 0 10px #00f6ff, 0 0 20px #b400ff, 0 0 30px #b400ff;
+        color: #00f6ff;
+    }
+    50% {
+        text-shadow: 0 0 5px #00f6ff, 0 0 10px #00f6ff, 0 0 20px #00f6ff, 0 0 40px #b400ff, 0 0 60px #b400ff;
+        color: #00f6ff;
+    }
+    100% {
+        text-shadow: 0 0 8px #00f6ff, 0 0 15px #00f6ff, 0 0 25px #00f6ff, 0 0 50px #b400ff, 0 0 80px #b400ff;
+        color: #b400ff;
+    }
+}
+
+/* === Form Input Neon Style === */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid rgba(0,255,255,0.5);
+    background: rgba(0,0,20,0.4);
+    color: #fff;
+    padding: 0.625rem 0.75rem;
+    height: 45px;
+    box-shadow: 0 0 5px rgba(0,255,255,0.3), 0 0 10px rgba(180,0,255,0.2);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #00f6ff;
+    box-shadow: 0 0 10px #00f6ff, 0 0 20px #b400ff;
+    outline: none;
+    background: rgba(0,0,30,0.6);
+}
+
+.input-group {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.input-group input.form-control {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+
+.toggle-password {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.75rem;
+    background: rgba(20,20,40,0.6);
+    border: 1px solid rgba(0,255,255,0.5);
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #00f6ff;
+    min-width: 50px;
+}
+
+.toggle-password:hover {
+    background: rgba(30,30,60,0.8);
+}
+
+.toggle-password i {
+    font-size: 1.1rem;
+    color: #00f6ff;
+    text-shadow: 0 0 5px #00f6ff, 0 0 10px #b400ff;
+    transition: all 0.3s ease;
+}
+
+.toggle-password:hover i {
+    color: #fff;
+    text-shadow: 0 0 8px #00f6ff, 0 0 20px #b400ff;
+}
+
+/* === Buttons Neon Glow === */
+.btn {
+    border-radius: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+    background: rgba(0,0,20,0.6);
+    color: #00f6ff;
+    border: 1px solid rgba(0,255,255,0.5);
+    height: 45px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:hover {
+    box-shadow: 0 0 10px #00f6ff, 0 0 20px #b400ff;
+    color: #fff;
+    background: rgba(0,0,30,0.8);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #00f6ff, #b400ff);
+    border: none;
+    color: #fff;
+}
+
+.btn-outline-light {
+    border-color: rgba(255,255,255,0.3);
+    color: #e0e0ff;
+}
+
+.btn-outline-light:hover {
+    border-color: #00f6ff;
+    color: #fff;
+}
+
+/* Form labels and text */
+.form-label {
+    color: #e0e0ff;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-check-label {
+    color: #e0e0ff;
+}
+
+.form-check-input:checked {
+    background-color: #00f6ff;
+    border-color: #00f6ff;
+}
+
+a {
+    color: #00f6ff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #fff;
+    text-shadow: 0 0 8px #00f6ff;
+}
+
+/* Alert styling */
+.alert-danger {
+    background: rgba(220,53,69,0.2);
+    border: 1px solid rgba(220,53,69,0.5);
+    color: #ff6b6b;
+    backdrop-filter: blur(10px);
+}
+
+/* Social login section */
+.social-login {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.social-btn.google {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #e0e0ff;
+}
+
+.social-btn.google:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: #00f6ff;
+}
+
+/* === Responsive Adjustments === */
+@media (max-width: 576px) {
+    body {
+        padding: 10px;
+        align-items: flex-start;
+    }
+    
+    .toggle-password {
+        padding: 0 0.5rem;
+        height: 40px;
+        min-width: 45px;
+    }
+    
+    .input-group input.form-control {
+        height: 40px;
+    }
+    
+    .btn {
+        height: 40px;
+    }
+    
+    .card {
+        margin-top: 20px;
+    }
+}
+
+/* Validation states */
+.is-invalid {
+    border-color: #ff6b6b !important;
+    box-shadow: 0 0 10px rgba(255,107,107,0.5) !important;
+}
+
+.invalid-feedback {
+    color: #ff6b6b;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
         <div class="card shadow-lg">
-            <div class="card-header bg-primary text-white text-center py-3">
+            <div class="card-header text-center py-3">
                 <h4><i class="fas fa-sign-in-alt me-2"></i> Login to SormatSea.io</h4>
             </div>
             <div class="card-body p-4">
                 {% if form.errors %}
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        <strong>Error!</strong> Please correct the following:
-                        <ul class="mt-2 mb-0">
-                            {% for field, errors in form.errors.items %}
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <strong>Error!</strong> Please correct the following:
+                    <ul class="mt-2 mb-0">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
                             {% endfor %}
-                        </ul>
+                        {% endfor %}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                        {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                    {% endfor %}
                 {% endif %}
 
                 <form method="post" class="needs-validation" novalidate>
                     {% csrf_token %}
                     
+                    <!-- Username -->
                     <div class="mb-3">
                         <label for="{{ form.username.id_for_label }}" class="form-label">
                             <i class="fas fa-user me-2"></i> Username or Email
@@ -39,7 +319,8 @@
                                name="{{ form.username.name }}" 
                                value="{{ form.username.value|default:'' }}"
                                placeholder="Enter your username or email"
-                               required>
+                               required
+                               autocomplete="username">
                         <div class="invalid-feedback">
                             {% if form.username.errors %}
                                 {{ form.username.errors.0 }}
@@ -49,6 +330,7 @@
                         </div>
                     </div>
 
+                    <!-- Password -->
                     <div class="mb-3">
                         <label for="{{ form.password.id_for_label }}" class="form-label">
                             <i class="fas fa-lock me-2"></i> Password
@@ -59,62 +341,56 @@
                                    id="{{ form.password.id_for_label }}" 
                                    name="{{ form.password.name }}"
                                    placeholder="Enter your password"
-                                   required>
-                            <button class="btn btn-outline-secondary toggle-password" type="button" aria-label="Toggle password visibility">
-                                <i class="fas fa-eye" aria-hidden="true"></i>
+                                   required
+                                   autocomplete="current-password">
+                            <button class="toggle-password" type="button" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
                             </button>
-                            {% if form.password.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.password.errors.0 }}
-                                </div>
-                            {% endif %}
                         </div>
+                        {% if form.password.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.password.errors.0 }}
+                            </div>
+                        {% endif %}
                     </div>
 
+                    <!-- Remember + Forgot -->
                     <div class="mb-3 d-flex justify-content-between align-items-center">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me">
-                            <label class="form-check-label" for="rememberMe">
-                                Remember me
-                            </label>
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
                         </div>
-                        {# Remove or comment out password reset if not configured #}
-                        {# <a href="{% url 'password_reset' %}" class="text-decoration-none small">
-                            Forgot password?
-                        </a> #}
+                        <a href="{% url 'marketplace:password_reset' %}" class="text-decoration-none">Forgot password?</a>
                     </div>
 
+                    <!-- Login Button -->
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="fas fa-sign-in-alt me-2"></i> Login
                         </button>
-                        <a href="{% url 'register' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-user-plus me-2"></i> Create Account
-                        </a>
                     </div>
                 </form>
 
-                {# Social login section - comment out if not configured #}
-                {% comment %}
-                <hr class="my-4">
-                <div class="text-center mb-3">
-                    <span class="text-muted">Or login with</span>
+                <!-- Social Login -->
+                <div class="social-login">
+                    <div class="text-center mb-3">
+                        <span class="text-muted">Or login with</span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="{% provider_login_url 'google' %}" class="social-btn google">
+                            <i class="fab fa-google"></i>
+                            Continue with Google
+                        </a>
+                    </div>
                 </div>
-                <div class="social-login d-grid gap-2">
-                    {% if 'google' in backends.backends %}
-                    <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger">
-                        <i class="fab fa-google me-2"></i> Google
-                    </a>
-                    {% endif %}
-                    
-                    {% if 'facebook' in backends.backends %}
-                    <a href="{% provider_login_url 'facebook' %}" class="btn btn-primary">
-                        <i class="fab fa-facebook-f me-2"></i> Facebook
-                    </a>
-                    {% endif %}
-                </div>
-                {% endcomment %}
 
+                <!-- Register Link -->
+                <div class="text-center mt-4">
+                    <p class="text-muted mb-0">Don't have an account?</p>
+                    <a href="{% url 'marketplace:register' %}" class="btn btn-outline-light btn-sm mt-2">
+                        Create an account
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -123,20 +399,44 @@
 
 {% block extra_js %}
 <script>
-// Toggle password visibility
 document.addEventListener('DOMContentLoaded', function() {
+    // Password toggle functionality
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', function() {
-            const input = this.closest('.input-group').querySelector('input[type="password"], input[type="text"]');
+            const input = this.closest('.input-group').querySelector('input');
             const icon = this.querySelector('i');
+            
             if (input.type === 'password') {
                 input.type = 'text';
                 icon.classList.replace('fa-eye', 'fa-eye-slash');
+                this.setAttribute('aria-label', 'Hide password');
             } else {
                 input.type = 'password';
                 icon.classList.replace('fa-eye-slash', 'fa-eye');
+                this.setAttribute('aria-label', 'Show password');
             }
         });
+    });
+
+    // Form validation
+    const forms = document.querySelectorAll('.needs-validation');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+
+    // Auto-hide alerts after 5 seconds
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
     });
 });
 </script>

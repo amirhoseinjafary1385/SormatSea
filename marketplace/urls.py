@@ -8,6 +8,9 @@ from .views import ProductView
 app_name = 'marketplace'  # Add this line to enable URL namespacing
 
 urlpatterns = [
+    path('password-reset/', 
+         auth_views.PasswordResetView.as_view(template_name='marketplace/password_reset.html'),
+         name='password_reset'),
     path('ton-nft/', views.ton_nft_collection, name='ton_nft_collection'),
     # Wallet connection
     path('wallet/connect/', views.wallet_connect, name='wallet_connect'),

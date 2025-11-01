@@ -16,42 +16,40 @@
                     <!-- Wallet Selection Section -->
                     <div class="wallet-options">
                         <h5 class="text-center mb-4">Choose your wallet</h5>
-                        
+
                         <!-- Tonkeeper Wallet Option -->
-                        <div class="wallet-item card mb-3" data-wallet="tonkeeper" style="cursor: pointer;">
+                        <div class="wallet-item card mb-3" data-wallet="tonkeeper">
                             <div class="card-body text-center">
                                 <img src="{% static 'images/tonkeeper-logo.png' %}" 
                                      alt="Tonkeeper Wallet" 
-                                     class="wallet-logo mb-3" 
-                                     style="width: 80px; height: 80px;">
+                                     class="wallet-logo mb-3">
                                 <h5 class="card-title">Tonkeeper</h5>
                                 <p class="card-text text-muted">Secure TON blockchain wallet</p>
                             </div>
                         </div>
 
                         <!-- MetaMask Wallet Option -->
-                        <div class="wallet-item card mb-3" data-wallet="metamask" style="cursor: pointer;">
+                        <div class="wallet-item card mb-3" data-wallet="metamask">
                             <div class="card-body text-center">
                                 <img src="{% static 'images/metamask-logo.png' %}" 
                                      alt="MetaMask Wallet" 
-                                     class="wallet-logo mb-3" 
-                                     style="width: 80px; height: 80px;">
+                                     class="wallet-logo mb-3">
                                 <h5 class="card-title">MetaMask</h5>
                                 <p class="card-text text-muted">Ethereum wallet browser extension</p>
                             </div>
                         </div>
 
                         <!-- Trust Wallet Option -->
-                        <div class="wallet-item card mb-3" data-wallet="trustwallet" style="cursor: pointer;">
+                        <div class="wallet-item card mb-3" data-wallet="trustwallet">
                             <div class="card-body text-center">
-                                <img src="{% static 'images/trustwallet-logo.png' %}" 
+                                <img src="{% static 'images/trust-wallet-logo.png' %}" 
                                      alt="Trust Wallet" 
-                                     class="wallet-logo mb-3" 
-                                     style="width: 80px; height: 80px;">
+                                     class="wallet-logo mb-3">
                                 <h5 class="card-title">Trust Wallet</h5>
                                 <p class="card-text text-muted">Multi-chain mobile wallet</p>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Connection Status -->
@@ -69,7 +67,7 @@
                         <button id="disconnectBtn" class="btn btn-outline-danger d-none">
                             <i class="fas fa-plug"></i> Disconnect Wallet
                         </button>
-                        <a href="{% url 'nft_list' %}" class="btn btn-secondary">
+                        <a href="{% url 'marketplace:nft_list' %}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Back to Marketplace
                         </a>
                     </div>
@@ -82,22 +80,168 @@
 {% endblock %}
 
 {% block extra_css %}
-
 <style>
+/* === Body & Background === */
+body {
+    background: linear-gradient(135deg, #0d0d20, #02010a, #1a0033, #000010);
+    background-size: 400% 400%;
+    animation: breatheBG 15s ease infinite;
+    min-height: 100vh;
+    color: #e0e0ff;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+@keyframes breatheBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* === Card Glass Style === */
+.card {
+    background: rgba(20, 20, 40, 0.4);
+    border: 1px solid rgba(180, 0, 255, 0.2);
+    border-radius: 18px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.15), inset 0 0 15px rgba(180, 0, 255, 0.1);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: all 0.4s ease;
+    z-index: 1;
+    animation: fadeIn 0.8s ease forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Neon Header Glow === */
+.card-header h4 {
+    color: #00f6ff;
+    text-shadow:
+        0 0 5px #00f6ff,
+        0 0 10px #00f6ff,
+        0 0 20px #00f6ff,
+        0 0 40px #b400ff,
+        0 0 60px #b400ff;
+    animation: neonGlow 2s ease-in-out infinite alternate;
+}
+@keyframes neonGlow {
+    0% { text-shadow: 0 0 2px #00f6ff, 0 0 5px #00f6ff, 0 0 10px #00f6ff, 0 0 20px #b400ff, 0 0 30px #b400ff; color: #00f6ff; }
+    50% { text-shadow: 0 0 5px #00f6ff, 0 0 10px #00f6ff, 0 0 20px #00f6ff, 0 0 40px #b400ff, 0 0 60px #b400ff; color: #00f6ff; }
+    100% { text-shadow: 0 0 8px #00f6ff, 0 0 15px #00f6ff, 0 0 25px #00f6ff, 0 0 50px #b400ff, 0 0 80px #b400ff; color: #b400ff; }
+}
+
+/* === Wallet Card Styles === */
+.wallet-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    flex: 1 1 200px;
+    max-width: 250px;
+}
+.wallet-item::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: 16px;
+    padding: 2px;
+    background: conic-gradient(from 0deg, #00f6ff, #b400ff, #00f6ff, #b400ff);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    opacity: 0.6;
+    animation: rotateBorder 4s linear infinite;
+    z-index: 0;
+}
+@keyframes rotateBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
 .wallet-item:hover {
-    transform: translateY(-2px);
-    transition: transform 0.2s ease;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 0 25px rgba(0,255,255,0.5), 0 0 40px rgba(180,0,255,0.35);
+    background: rgba(255,255,255,0.12);
 }
+
+/* === Wallet Logo Styles (Responsive & Neon) === */
 .wallet-logo {
+    width: 80px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 15px;
     object-fit: contain;
+    border-radius: 50%;
+    padding: 5px;
+    background: rgba(255,255,255,0.05);
+    box-shadow: 0 0 12px rgba(0,255,255,0.6), 0 0 20px rgba(180,0,255,0.4);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
-.connection-status {
-    min-height: 80px;
+.wallet-item:hover .wallet-logo {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 18px rgba(180,0,255,0.9));
 }
+
+/* === Wallet Cards Flex Layout === */
+.wallet-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+/* === Connection Status === */
+.connection-status { min-height: 80px; }
+.alert {
+    border-radius: 10px;
+    backdrop-filter: blur(6px);
+    background: rgba(0,0,20,0.4);
+    border: 1px solid rgba(0,255,255,0.25);
+    color: #ccf;
+}
+
+/* === Buttons Neon Glow === */
+.btn {
+    border-radius: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+.btn::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: 12px;
+    padding: 2px;
+    background: conic-gradient(from 0deg, #00f6ff, #b400ff, #00f6ff, #b400ff);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    opacity: 0.5;
+    animation: rotateBorder 4s linear infinite;
+    z-index: -1;
+}
+.btn:hover { color: #fff !important; box-shadow: 0 0 15px rgba(0,255,255,0.6), 0 0 25px rgba(180,0,255,0.4); }
+.btn-secondary { background-color: transparent; border: 1px solid rgba(0,255,255,0.5); color: #00f6ff; }
+.btn-secondary:hover { background: linear-gradient(90deg, #00f6ff, #b400ff); }
+.btn-outline-danger { color: #ff0040; border-color: rgba(255,0,64,0.5); }
+.btn-outline-danger:hover { background: linear-gradient(90deg, rgba(255,0,64,0.6), rgba(180,0,255,0.4)); box-shadow: 0 0 15px rgba(255,0,64,0.6); }
+
+/* === Responsive Wallet Logos === */
+@media (max-width: 768px) { .wallet-logo { width: 60px; height: 60px; } }
+@media (max-width: 480px) { .wallet-logo { width: 50px; height: 50px; } }
+
 </style>
 {% endblock %}
-{% block extra_css %}
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const walletText = document.getElementById('walletText');
@@ -190,4 +334,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-{% endblock %}

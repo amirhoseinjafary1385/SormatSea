@@ -15,7 +15,8 @@
       {% endfor %}
     </div>
   {% else %}
-    <div class="alert alert-info">The Category Doesn't exit! <a href="{% url 'nft_create' %}">Create one</a> or check back later.</div>
+    <div class="alert alert-info">The Category Doesn't exit! <a href="{% url 'marketplace:nft_create' %}">Create NFT</a>
+ or check back later.</div>
   {% endif %}
 </div>
 {% endblock %}

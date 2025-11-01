@@ -485,10 +485,13 @@
             <button class="LibraryButton">
                 <div class="LibraryButton__inner">
                     <div class="LibraryButton__before">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20">
-                            <path fill="currentColor" fill-rule="evenodd" d="M17.293 4.98c.255-1.201-.925-2.203-2.068-1.762L2.295 8.204c-1.179.455-1.118 2.137.082 2.512l2.943.918 1.871 5.614c.462 1.387 2.402 1.387 2.865 0l1.871-5.614 5.366-5.654zm-2.526 1.91l-4.634 4.89a.8.8 0 0 1-1.062.112L5.78 9.382l7.931-3.055a.4.4 0 0 1 .517.244l.539 1.32z" clip-rule="evenodd"/>
-                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2m0-4h4m-4 4h4m-4-8h4" />
+                    </svg>
+
                     </div>
+                    
                     <div class="LibraryButton__text">Wallet</div>
                 </div>
             </button>
@@ -618,9 +621,9 @@
                             <div class="col-md-7">
                                 <div class="card-body text-start">
                                     <h5 class="card-title">Sample NFT: "Sormat Sunrise"</h5>
-                                    <p class="card-text small text-muted mb-1">by <strong>ArtistName</strong></p>
-                                    <p class="card-text mb-2"><span class="fw-bold">Price:</span> <span class="text-success">2,500 IRT</span></p>
-                                    <p class="card-text"><small class="text-muted">This is a demo NFT shown when there are no featured items. Use the Create button to mint your own.</small></p>
+                                    <p class="card-text small text-white mb-1">by <strong class="text-white">ArtistName</strong></p>
+                                    <p class="card-text mb-2"><span class="fw-bold">Price:</span> <span class="text-success">250,000 IRT</span></p>
+                                    <p class="card-text"><small class="text-white">This is a demo NFT shown when there are no featured items. Use the Create button to mint your own.</small></p>
                                     <div class="d-flex gap-2 mt-2">
                                         <a href="{% url 'marketplace:nft_create' %}" class="btn btn-outline-light btn-sm">Create NFT</a>
                                         <a href="{% url 'marketplace:nfts' %}" class="btn btn-primary btn-sm">Browse NFTs</a>
@@ -631,7 +634,8 @@
                     </div>
                     <div class="mt-4">
                         <h4 class="text-white mb-3">No Featured NFTs Available</h4>
-                        <p class="text-muted mb-4">Be the first to discover amazing digital collectibles!</p>
+                        <p class="text-white mb-4">Be the first to discover amazing digital collectibles!</p>
+
                     </div>
                 </div>
                 {% endif %}
