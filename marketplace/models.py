@@ -219,6 +219,10 @@ class Transaction(models.Model):
             return timezone.now() <= self.discount_end
         return False
 
+    
+    
+
+
 
 
     

@@ -3,6 +3,16 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import get_user_model
 from .models import NFT, Category
 from django.contrib.auth.models import User
+from django.core.validators import (
+    MinValueValidator,
+    MaxValueValidator,
+    MinLengthValidator,
+    MaxLengthValidator,
+)
+from django.core.exceptions import ValidationError
+from django.forms import ModelForm, Form
+
+
 
 class BootstrapFormMixin:
     def __init__(self, *args, **kwargs):
@@ -97,6 +107,9 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ['name', 'description']
         widgets = {
+
+
+            
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Category Name'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Category Description', 'rows': 3}),
         }
