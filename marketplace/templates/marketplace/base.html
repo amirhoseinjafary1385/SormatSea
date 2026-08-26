@@ -5,347 +5,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SormatSea - NFT Marketplace{% endblock %}</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <!-- Glide.js CSS for carousel -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.5.0/css/glide.core.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.5.0/css/glide.theme.min.css">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'images/Sormat-logo.png' %}">
-    <!-- BootStrap Icon -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Your project stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/subheader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ton_nft.css' %}">
+
+    <!-- Bootstrap JS bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Web3.js for wallet connection -->
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    
 
+    <!-- Glide.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.5.0/glide.min.js"></script>
 
-    <style>
-        
-        /* Base Theme Variables */
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --border-color: #dee2e6;
-            --shadow: rgba(0, 0, 0, 0.1);
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --border-color: #404040;
-            --shadow: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Sticky Footer Styles */
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background-color: #ffffff;
-            transition: background-color 0.3s ease;
-        }      
-        .main-content {
-            flex: 1;
-        }
-        
-        .nft-carousel {
-            margin: 2rem 0;
-            padding: 1rem 0;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-radius: 10px;
-        }
-        .nft-slide {
-            padding: 15px;
-            text-align: center;
-        }
-        .nft-slide img {
-            max-height: 300px;
-            width: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
-        }
-        .nft-slide img:hover {
-            transform: scale(1.05);
-        }
-        .nft-info {
-            margin-top: 10px;
-            color: white;
-        }
-        .nft-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .nft-price {
-            color: #4ecca3;
-            font-weight: bold;
-        }
-        .glide__arrow {
-            background-color: rgba(0,0,0,0.5);
-            border: none;
-        }
-        .glide__arrow:hover {
-            background-color: rgba(0,0,0,0.8);
-        }
-        
-        /* Subheader Styles */
-        .Subheader__list {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background: #000000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .LibraryButton {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            background: #121212;
-            color: #000000;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .LibraryButton:hover {
-            background: #1a1a1a;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
-        }
-        
-        .LibraryButton--active {
-            background: #1a1a1a;
-            border-color: #363434;
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
-        }
-        
-        .LibraryButton__inner {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .LibraryButton__before svg {
-            width: 20px;
-            height: 20px;
-            transition: transform 0.3s ease;
-            color: #ffffff;
-        }
-        
-        .LibraryButton:hover .LibraryButton__before svg {
-            transform: scale(1.1);
-        }
-        
-        .LibraryButton__text {
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: #ffffff;
-        }
-        
-        /* SVG icon specific styles */
-        .LibraryButton__before svg path {
-            transition: fill 0.3s ease;
-            fill: currentColor;
-        }
-        
-        .LibraryButton:hover svg path {
-            fill: #ffffff;
-        }
-        
-        /* Dark theme adjustments */
-        [data-theme="dark"] .LibraryButton {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        [data-theme="dark"] .LibraryButton:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Footer Styles */
-        footer {
-            margin-top: auto;
-            background-color: #212529 !important;
-            color: 20px 10px;
-            text-align: center;
-        }
-
-        @media  (min-width: 768px) {
-            footer {
-                padding: 30px 40px;
-                text-align: left;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-          /* Wallet Connection Styles */
-        .wallet-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 25px;
-            padding: 8px 20px;
-            color: white;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
-        }
-
-        .wallet-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            color: white;
-        }
-
-        .wallet-connected {
-            background: linear-gradient(135deg, #4ecca3 0%, #44a08d 100%);
-        }
-
-        .wallet-address {
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px 8px;
-            border-radius: 12px;
-            margin-left: 8px;
-        }
-
-        .wallet-balance {
-            font-size: 0.8rem;
-            opacity: 0.9;
-        }
-
-        .wallet-dropdown {
-            min-width: 280px;
-        }
-
-        .wallet-option {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .wallet-option:hover {
-            background-color: #f8f9fa;
-            border-color: #667eea;
-        }
-
-        .wallet-icon {
-            width: 32px;
-            height: 32px;
-            margin-right: 12px;
-            border-radius: 6px;
-        }
-
-        .search-bar {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            color: white;
-            padding: 8px 20px;
-            width: 300px;
-        }
-
-        .search-bar::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .search-bar:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #4ecca3;
-            box-shadow: 0 0 0 0.2rem rgba(78, 204, 163, 0.25);
-            color: white;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #dc3545;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-icon-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Dark mode toggle */
-        .theme-toggle {
-            background: none;
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            color: var(--text-primary);
-            padding: 6px 12px;
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transform: scale(1.05);
-        }
-
-        /* Dark theme specific styles */
-        .dark-theme {
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }
-
-        [data-theme="dark"] .navbar-dark {
-            background-color: #000000 !important;
-        }
-
-        [data-theme="dark"] .bg-dark {
-            background-color: #000000 !important;
-        }
-
-        [data-theme="light"] {
-            background-color: #ffffff;
-            color: #000000;
-        }
-
-        [data-theme="light"] .navbar-dark {
-            background-color: #343a40 !important;
-        }
-
-        /* Ensure sun icon is visible in both themes */
-        .theme-toggle .bi-sun-fill {
-            color: #ffc107 !important; /* Bright yellow for visibility */
-        }
-        [data-theme="dark"] .theme-toggle .bi-sun-fill {
-            color: #ffe066 !important; /* Lighter yellow for dark backgrounds */
-        }
-    </style>
-
-    
     {% block extra_css %}{% endblock %}
-    <script src="{% static 'marketplace/js/Theme.js' %}"></script>
+    <script src="{% static 'js/Theme.js' %}"></script>
 </head>
 <body class="d-flex flex-column h-100">
     <!-- Navigation -->
@@ -353,16 +45,15 @@
         <div class="container-fluid">
             <!-- Existing navbar brand -->
             <a class="navbar-brand d-flex align-items-center" href="{% url 'marketplace:nft_list' %}">
-                <!-- Add the new SVG icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                     width="24" 
-                     height="24" 
-                     fill="none" 
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="24"
+                     height="24"
+                     fill="none"
                      viewBox="0 0 20 20"
                      class="me-2">
-                    <path fill="currentColor" 
-                          fill-rule="evenodd" 
-                          d="M5.922 3h8.156c.533 0 .994 0 1.361.034.371.034.796.111 1.16.376.493.359.811.909.875 1.515.047.448-.097.854-.253 1.193-.154.335-.385.734-.651 1.196L10.78 17.35a.9.9 0 0 1-1.56 0L3.43 7.314c-.266-.462-.496-.861-.65-1.196-.156-.339-.301-.745-.254-1.193a2.15 2.15 0 0 1 .875-1.515c.365-.265.789-.342 1.16-.376C4.928 3 5.39 3 5.921 3zM4.449 4.874a.35.35 0 0 0-.131.228c.003.017.018.092.096.263.116.25.303.577.596 1.085l4.09 7.089V4.8H5.963c-.586 0-.963 0-1.237.026-.188.017-.26.042-.277.048M10.9 4.8v8.739l4.09-7.09c.293-.507.48-.834.596-1.084.079-.17.094-.246.096-.263a.35.35 0 0 0-.131-.228 1.1 1.1 0 0 0-.276-.048C15 4.801 14.623 4.8 14.037 4.8z" 
+                    <path fill="currentColor"
+                          fill-rule="evenodd"
+                          d="M5.922 3h8.156c.533 0 .994 0 1.361.034.371.034.796.111 1.16.376.493.359.811.909.875 1.515.047.448-.097.854-.253 1.193-.154.335-.385.734-.651 1.196L10.78 17.35a.9.9 0 0 1-1.56 0L3.43 7.314c-.266-.462-.496-.861-.65-1.196-.156-.339-.301-.745-.254-1.193a2.15 2.15 0 0 1 .875-1.515c.365-.265.789-.342 1.16-.376C4.928 3 5.39 3 5.921 3zM4.449 4.874a.35.35 0 0 0-.131.228c.003.017.018.092.096.263.116.25.303.577.596 1.085l4.09 7.089V4.8H5.963c-.586 0-.963 0-1.237.026-.188.017-.26.042-.277.048M10.9 4.8v8.739l4.09-7.09c.293-.507.48-.834.596-1.084.079-.17.094-.246.096-.263a.35.35 0 0 0-.131-.228 1.1 1.1 0 0 0-.276-.048C15 4.801 14.623 4.8 14.037 4.8z"
                           clip-rule="evenodd">
                     </path>
                 </svg>
@@ -388,7 +79,7 @@
                             <button type="submit" class="btn btn-outline-light ms-2">Search</button>
                         </form>
                     </li>
-                    
+
                     <!-- Theme Toggle -->
                     <li class="nav-item me-2">
                         <button class="btn theme-toggle" aria-label="Toggle theme" onclick="toggleTheme(event)">
@@ -397,26 +88,23 @@
                     </li>
 
                     <!-- Wallet Section -->
-
+                    <li class="nav-item">
                         <button class="btn wallet-btn" id="walletButton">
-
                             <span id="walletText">Connect Wallet</span>
                         </button>
-
+                    </li>
 
                     {% if user.is_authenticated %}
                         {% if user.is_superuser %}
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'marketplace:ton_nft_collection' %}">TON NFTs</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin">Admin</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-warning" href="{% url 'marketplace:register' %}">Registration Forms</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'marketplace:ton_nft_collection' %}">TON NFTs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin">Admin</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" href="{% url 'marketplace:register' %}">Registration Forms</a>
+                            </li>
                         {% endif %}
                         <li class="nav-item">
                             <span class="navbar-text me-2">Welcome, {{ user.username }}</span>
@@ -440,7 +128,7 @@
         </div>
     </nav>
 
-    <!-- Add this after your main navbar -->
+    <!-- Subheader -->
     <div class="Subheader__list">
         <a class="AppLink" href="{% url 'marketplace:nft_list' %}">
             <button class="LibraryButton LibraryButton--active">
@@ -455,7 +143,7 @@
             </button>
         </a>
 
-        <a class="AppLink" href="{% url 'marketplace:nft_list' %}">
+        <a class="AppLink" href="{% url 'marketplace:nfts' %}">
             <button class="LibraryButton">
                 <div class="LibraryButton__inner">
                     <div class="LibraryButton__before">
@@ -486,12 +174,10 @@
                 <div class="LibraryButton__inner">
                     <div class="LibraryButton__before">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2m0-4h4m-4 4h4m-4-8h4" />
-                    </svg>
-
+                        </svg>
                     </div>
-                    
                     <div class="LibraryButton__text">Wallet</div>
                 </div>
             </button>
@@ -522,7 +208,7 @@
         <div class="container-fluid nft-carousel">
             <div class="container">
                 <h2 class="text-center text-white mb-4">Featured NFTs</h2>
-                
+
                 {% if featured_nfts %}
                 <div class="glide">
                     <div class="glide__track" data-glide-el="track">
@@ -571,20 +257,16 @@
                     </div>
                 </div>
                 {% else %}
-                <!-- Empty State: show a sample NFT card to guide users -->
+                <!-- Empty State -->
                 <div class="empty-state text-center py-5">
                     <div class="card bg-dark text-white mx-auto" style="max-width: 520px;">
                         <div class="row g-0 align-items-center" style="border: 1px solid rgba(87, 84, 84, 0.185); border-radius:15px;">
                             <div class="col-md-5">
-                                <!-- Mini Carousel showcasing 3 beautiful sample images -->
                                 <div id="sampleSlideCarousel" class="carousel slide p-3" data-bs-ride="carousel">
                                     <div class="carousel-indicators">
                                         <button type="button" data-bs-target="#sampleSlideCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                                         <button type="button" data-bs-target="#sampleSlideCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
                                         <button type="button" data-bs-target="#sampleSlideCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                        <button type="button" data-bs-target="#sampleSlideCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                                        <button type="button" data-bs-target="#sampleSlideCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
-                                        <button type="button" data-bs-target="#sampleSlideCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
                                     </div>
                                     <div class="carousel-inner" style="border-radius:30px; overflow:hidden;">
                                         <div class="carousel-item active">
@@ -595,17 +277,6 @@
                                         </div>
                                         <div class="carousel-item">
                                             <img src="{% static 'images/NFT3.jpg' %}" class="d-block w-100" alt="Sample NFT 3" style="height:300px; object-fit:cover;">
-                                        </div>
-
-                                        <div class="carousel-item">
-                                            <img src="{% static 'images/NFT4.jpg' %}" class="d-block w-100" alt="Sample NFT 3" style="height:300px; object-fit:cover;">
-                                        </div>
-
-                                        <div class="carousel-item">
-                                            <img src="{% static 'images/NFT5.jpg' %}" class="d-block w-100" alt="Sample NFT 3" style="height:300px; object-fit:cover;">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img src="{% static 'images/NFT6.jpg' %}" class="d-block w-100" alt="Sample NFT 3" style="height:300px; object-fit:cover;">
                                         </div>
                                     </div>
                                     <button class="carousel-control-prev" type="button" data-bs-target="#sampleSlideCarousel" data-bs-slide="prev">
@@ -623,7 +294,7 @@
                                     <h5 class="card-title">Sample NFT: "Sormat Sunrise"</h5>
                                     <p class="card-text small text-white mb-1">by <strong class="text-white">ArtistName</strong></p>
                                     <p class="card-text mb-2"><span class="fw-bold">Price:</span> <span class="text-success">250,000 IRT</span></p>
-                                    <p class="card-text"><small class="text-white">This is a demo NFT shown when there are no featured items. Use the Create button to mint your own.</small></p>
+                                    <p class="card-text"><small class="text-white">This is a demo NFT shown when there are no featured items.</small></p>
                                     <div class="d-flex gap-2 mt-2">
                                         <a href="{% url 'marketplace:nft_create' %}" class="btn btn-outline-light btn-sm">Create NFT</a>
                                         <a href="{% url 'marketplace:nfts' %}" class="btn btn-primary btn-sm">Browse NFTs</a>
@@ -632,207 +303,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-4">
-                        <h4 class="text-white mb-3">No Featured NFTs Available</h4>
-                        <p class="text-white mb-4">Be the first to discover amazing digital collectibles!</p>
-
-                    </div>
                 </div>
                 {% endif %}
             </div>
         </div>
-        <style>
-        /* Enhanced NFT Carousel Styles */
-        .nft-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-        .nft-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: #4ecca3;
-        }
-        .nft-image-container {
-            position: relative;
-            overflow: hidden;
-            height: 250px;
-        }
-        .nft-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        .nft-card:hover .nft-image {
-            transform: scale(1.1);
-        }
-        .nft-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            color: white;
-            font-weight: 500;
-        }
-        .nft-card:hover .nft-overlay {
-            opacity: 1;
-        }
-        .nft-overlay i {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        .nft-info {
-            padding: 1.5rem;
-            color: white;
-        }
-        .nft-title {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: #ffffff;
-        }
-        .nft-category {
-            font-size: 0.9rem;
-            color: #b0b0b0;
-            margin-bottom: 0.5rem;
-        }
-        .nft-price {
-            color: #4ecca3;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        .nft-owner {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        .glide__arrow {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        .glide__arrow:hover {
-            background: rgba(78, 204, 163, 0.8);
-            border-color: #4ecca3;
-            transform: scale(1.1);
-        }
-        .glide__arrow--disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        .glide__bullets {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
-        }
-        .glide__bullet {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .glide__bullet--active {
-            background: #4ecca3;
-            border-color: #4ecca3;
-            transform: scale(1.2);
-        }
-        .empty-state {
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .empty-state-icon {
-            opacity: 0.3;
-        }
-        .empty-state .btn {
-            border-radius: 25px;
-            padding: 12px 24px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .empty-state .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-        @media (max-width: 768px) {
-            .nft-image-container {
-                height: 200px;
-            }
-            .nft-info {
-                padding: 1rem;
-            }
-            .nft-title {
-                font-size: 1rem;
-            }
-            .glide__arrow {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-            .empty-state {
-                padding: 2rem 1rem;
-            }
-            .empty-state .d-flex {
-                flex-direction: column;
-                gap: 1rem !important;
-            }
-        }
-        .nft-slide {
-            animation: slideIn 0.6s ease-out;
-        }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .nft-slide a {
-            display: block;
-            height: 100%;
-        }
-        .nft-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        .nft-info {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        </style>
         {% endblock %}
 
         <!-- Page Content -->
@@ -842,7 +316,7 @@
         </div>
     </div>
 
-    <!-- Footer - Now properly positioned -->
+    <!-- Footer -->
     <footer class="bg-dark text-white py-4 mt-auto">
         <div class="container">
             <div class="row">
@@ -856,7 +330,7 @@
                 <div class="col-md-3">
                     <h6 class="mb-3">Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'marketplace:nft_list' %}" class="text-light text-decoration-none">Browse NFTs</a></li>
+                        <li><a href="{% url 'marketplace:nfts' %}" class="text-light text-decoration-none">Browse NFTs</a></li>
                         <li><a href="{% url 'marketplace:category_list' %}" class="text-light text-decoration-none">Categories</a></li>
                         <li><a href="{% url 'marketplace:cart_detail' %}" class="text-light text-decoration-none">Cart</a></li>
                     </ul>
@@ -889,368 +363,73 @@
             </div>
         </div>
     </footer>
-</body>
-<script>
 
-
-
-// Navbar search handler: validates and redirects to nft list with query param
-function handleSearchSubmit(event) {
-    event.preventDefault();
-    const input = document.getElementById('navbar-search-input');
-    if (!input) return false;
-    const q = input.value.trim();
-    if (!q) {
-        input.classList.add('is-invalid');
-        setTimeout(() => input.classList.remove('is-invalid'), 1200);
+    <!-- JavaScript -->
+    <script>
+    // Navbar search handler
+    function handleSearchSubmit(event) {
+        event.preventDefault();
+        const input = document.getElementById('navbar-search-input');
+        if (!input) return false;
+        const q = input.value.trim();
+        if (!q) {
+            input.classList.add('is-invalid');
+            setTimeout(() => input.classList.remove('is-invalid'), 1200);
+            return false;
+        }
+        const base = '{% url "marketplace:nft_list" %}';
+        const url = new URL(base, window.location.origin);
+        url.searchParams.set('q', q);
+        window.location.href = url.toString();
         return false;
     }
-    // Build URL to nft_list with query param 'q'
-    const base = '{% url "marketplace:nft_list" %}';
-    const url = new URL(base, window.location.origin);
-    url.searchParams.set('q', q);
-    window.location.href = url.toString();
-    return false;
-}
 
-(() => {
-    const fallbackImage = '{% static "images/NFT_placeholder.png" %}';
+    // Theme toggle function
+    function toggleTheme(event) {
+        event.preventDefault();
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+            icon.className = 'bi bi-moon-fill';
+        } else {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+            icon.className = 'bi bi-sun-fill';
+        }
+    }
 
-    // Initialize Glide.js if available and .glide exists
-    function initGlide() {
-        const glideEl = document.querySelector('.glide');
-        if (!glideEl || typeof Glide === 'undefined') return null;
-        try {
-            const glide = new Glide('.glide', {
-                type: 'carousel',
-                startAt: 0,
-                perView: 3,
-                gap: 24,
-                autoplay: 5000,
-                hoverpause: true,
-                animationDuration: 600,
-                breakpoints: {
-                    1200: { perView: 3 },
-                    991: { perView: 2 },
-                    600: { perView: 1 }
+    // Initialize Glide.js
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if Glide is defined
+        if (typeof Glide !== 'undefined') {
+            const glideEl = document.querySelector('.glide');
+            if (glideEl) {
+                try {
+                    const glide = new Glide('.glide', {
+                        type: 'carousel',
+                        startAt: 0,
+                        perView: 3,
+                        gap: 24,
+                        autoplay: 5000,
+                        hoverpause: true,
+                        animationDuration: 600,
+                        breakpoints: {
+                            1200: { perView: 3 },
+                            991: { perView: 2 },
+                            600: { perView: 1 }
+                        }
+                    });
+                    glide.mount();
+                } catch (err) {
+                    console.warn('Glide init error:', err);
                 }
-            });
-            glide.mount();
-            return glide;
-        } catch (err) {
-            console.warn('Glide init error:', err);
-            return null;
+            }
         }
-    }
-
-    // Simple lightbox viewer (no Bootstrap dependency)
-    function createLightbox() {
-        const overlay = document.createElement('div');
-        overlay.id = 'nft-lightbox';
-        Object.assign(overlay.style, {
-            position: 'fixed',
-            inset: '0',
-            background: 'rgba(0,0,0,0.85)',
-            display: 'none',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2000,
-            padding: '20px'
-        });
-
-        const imgWrap = document.createElement('div');
-        Object.assign(imgWrap.style, {
-            maxWidth: '95%',
-            maxHeight: '95%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-        });
-
-        const img = document.createElement('img');
-        Object.assign(img.style, {
-            maxWidth: '100%',
-            maxHeight: '100%',
-            borderRadius: '12px',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.6)'
-        });
-
-        imgWrap.appendChild(img);
-        overlay.appendChild(imgWrap);
-        document.body.appendChild(overlay);
-
-        function show(src, alt) {
-            img.src = src || fallbackImage;
-            img.alt = alt || '';
-            overlay.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        function hide() {
-            overlay.style.display = 'none';
-            document.body.style.overflow = '';
-            img.src = '';
-        }
-
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay || e.target === img) hide();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') hide();
-        });
-
-        return { show, hide, element: overlay };
-    }
-
-    // Preload nearby slide images for smoother transitions
-    function preloadAdjacentImages(glide) {
-        if (!glide) return;
-        const slides = document.querySelectorAll('.glide__slide img');
-        function preloadIndex(i) {
-            const s = slides[i];
-            if (!s) return;
-            const src = s.dataset.src || s.src;
-            if (!src) return;
-            const img = new Image();
-            img.src = src;
-        }
-        glide.on('move.after', () => {
-            const idx = glide.index;
-            preloadIndex(idx);
-            preloadIndex(idx + 1);
-            preloadIndex(idx - 1);
-        });
-    }
-
-    // Add click handlers to slide images to open lightbox
-    function bindSlideImageClicks(lightbox) {
-        const images = document.querySelectorAll('.glide__slide img, .nft-slide img, .nft-image');
-        images.forEach((imgEl) => {
-            // support lazy data-src attribute
-            const src = imgEl.getAttribute('src') || imgEl.dataset.src;
-            if (!imgEl.complete) {
-                imgEl.addEventListener('error', () => { imgEl.src = fallbackImage; });
-            }
-            imgEl.addEventListener('click', (e) => {
-                e.preventDefault();
-                const srcToShow = imgEl.dataset.src || imgEl.src || fallbackImage;
-                lightbox.show(srcToShow, imgEl.alt || '');
-            });
-            // ensure cursor feedback
-            imgEl.style.cursor = 'zoom-in';
-        });
-    }
-
-    // Safe image error fallback for all carousel images
-    function attachImageErrorHandlers() {
-        const imgs = document.querySelectorAll('.glide__slide img, .nft-image, .carousel-item img');
-        imgs.forEach(img => {
-            img.addEventListener('error', () => {
-                if (img.dataset._errored) return;
-                img.dataset._errored = '1';
-                img.src = fallbackImage;
-            });
-        });
-    }
-
-    // Initialize Bootstrap carousel if present for the sampleSlideCarousel
-    function initBootstrapCarousel() {
-        const el = document.getElementById('sampleSlideCarousel');
-        if (!el || typeof bootstrap === 'undefined' || !bootstrap.Carousel) return;
-        try {
-            // eslint-disable-next-line no-new
-            new bootstrap.Carousel(el, { interval: 3500, ride: 'carousel' });
-        } catch (err) {
-            // ignore
-        }
-    }
-
-    // Keyboard navigation for Glide if available
-    function bindKeyboardNav(glide) {
-        if (!glide) return;
-        let isModelOpen = false;
-        document.addEventListener('nft-lightbox-open', () => { isModelOpen = true;})
-        document.addEventListener('nft-lightbox-close', () => { isModelOpen = false;})
-        
-        //Config 
-        const config = {
-            nextkeys: ['ArrowRight', 'l', 'L'],
-            prevKeys: ['ArrowLeft', 'h', 'H'],
-            firstSlideKeys: ['Home'],
-            lastSlideKeys: ['End'],
-            playPauseKeys: ['Space'],
-            autoplayDelay: 5000
-        };
-
-        let autoplayInterval = null;
-        let isPaused = false;
-
-        const shouldIgnoreInput = (e) => {
-            return isModelOpen ||
-                   e.target.tagName === 'INPUT' ||
-                   e.target.tagName === 'TEXTAREA' ||
-                   e.ctrlKey ||
-                   e.altKey ||
-                   e.metaKey;
-          
-        };
-
-        const startAutoplay = () => {
-            if (autoplayInterval) clearInterval(autoplayInterval);
-            autoplayInterval = setInterval(() => {
-            if (!isPaused) glide.go('>');
-            }, config.autoplayDelay);
-        };
-
-        const stopAutoplay = () => {
-            if (autoplayInterval) {
-            clearInterval(autoplayInterval);
-            autoplayInterval = null;
-            }
-        };
-
-        // Pause on hover / focus and resume on leave / blur
-        const glideRoot = document.querySelector('.glide');
-        if (glideRoot) {
-            glideRoot.addEventListener('mouseenter', () => {
-            isPaused = true;
-            stopAutoplay();
-            });
-            glideRoot.addEventListener('mouseleave', () => {
-            isPaused = false;
-            startAutoplay();
-            });
-            glideRoot.addEventListener('focusin', () => {
-            isPaused = true;
-            stopAutoplay();
-            });
-            glideRoot.addEventListener('focusout', () => {
-            isPaused = false;
-            startAutoplay();
-            });
-        }
-
-        // Toggle play/pause
-        const togglePlayPause = () => {
-            isPaused = !isPaused;
-            if (isPaused) stopAutoplay(); else startAutoplay();
-        };
-
-        // Start autoplay by default (if glide exists)
-        startAutoplay();
-
-        // Keyboard handling (respect shouldIgnoreInput)
-        document.addEventListener('keydown', (e) => {
-            if (shouldIgnoreInput(e)) return;
-
-            const key = e.key;
-            const code = e.code || '';
-
-            // Next / Prev
-            if (config.nextkeys.includes(key) || config.nextkeys.includes(code)) {
-            e.preventDefault();
-            glide.go('>');
-            return;
-            }
-            if (config.prevKeys.includes(key) || config.prevKeys.includes(code)) {
-            e.preventDefault();
-            glide.go('<');
-            return;
-            }
-
-            // First / Last
-            if (config.firstSlideKeys.includes(key) || config.firstSlideKeys.includes(code)) {
-            e.preventDefault();
-            glide.go('=0');
-            return;
-            }
-            if (config.lastSlideKeys.includes(key) || config.lastSlideKeys.includes(code)) {
-            e.preventDefault();
-            const slides = document.querySelectorAll('.glide__slide');
-            const lastIndex = slides.length ? slides.length - 1 : 0;
-            glide.go('=' + lastIndex);
-            return;
-            }
-
-            // Play / Pause (Space can be reported differently across browsers)
-            if (config.playPauseKeys.includes(key) || config.playPauseKeys.includes(code) || key === ' ') {
-            e.preventDefault();
-            togglePlayPause();
-            return;
-            }
-        });
-
-        // Pause autoplay while user is interacting with arrows or bullets
-        if (glideRoot) {
-            glideRoot.querySelectorAll('.glide__arrow, .glide__bullet').forEach(el => {
-            el.addEventListener('mouseenter', () => { isPaused = true; stopAutoplay(); });
-            el.addEventListener('mouseleave', () => { isPaused = false; startAutoplay(); });
-            });
-        }
-
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') glide.go('<');
-            if (e.key === 'ArrowRight') glide.go('>');
-        });
-    }
-
-    const addKeyboardInstructions = () => {
-        const container = document.querySelector('.glide');
-        if (container){
-            const instructions = document.createElement('div');
-            instructions.className = 'keyboard-instructions';
-            instructions.innerHTML = `
-                <small class="text-white-50">
-                    Keyboard shortcuts: ← → (navigate), Home/End (first/last), Space (pause/play)
-                </small>
-            `;
-            instructions.style.cssText = `
-                text-align: center;
-                margin-top: 1rem;
-                font-size: 0.85rem;
-            `;
-            container.appendChild(instructions);
-        }       
-    };
-    addKeyboardInstructions();
-
-    // Main init on DOM ready
-    document.addEventListener('DOMContentLoaded', () => {
-        const glide = initGlide();
-        const lightbox = createLightbox();
-        attachImageErrorHandlers();
-        bindSlideImageClicks(lightbox);
-        preloadAdjacentImages(glide);
-        bindKeyboardNav(glide);
-        initBootstrapCarousel();
-
-        // If glide exists, ensure images in slides use data-src if available for lazy loading
-        document.querySelectorAll('.glide__slide img').forEach(img => {
-            if (img.dataset.src && !img.src) {
-                img.src = img.dataset.src;
-            }
-        });
     });
+    </script>
 
-    // Main init on DOM ready
-    document.addEventListener('DOMContentLoaded', () => {
-        const glide = initGlide();
-        const lightbox = createLightbox();
-        attachImageErrorHandlers();
-        bindSlideImageClicks(lightbox);
-        preloadAdjacentImages(glide);
-        bindKeyboardNav(glide);
-        initBootstrapCarousel();
-
-        // If glide exists, ensure images in slides use data-src if available for lazy loading
-        document.querySelectorAll('.glide__slide img').forEach(img => {
-            if (img.dataset.src && !img.src) {
-                img.src = img.dataset.src;
-            }
-        });
-    });
-})();
-
-
-</script>
+    {% block extra_js %}{% endblock %}
+</body>
 </html>

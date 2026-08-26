@@ -4,71 +4,88 @@
 {% block title %}Connect Wallet - SormatSea{% endblock %}
 
 {% block content %}
-
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4 class="mb-0">Connect Your Wallet</h4>
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0">
+                        <i class="fas fa-wallet me-2"></i>Connect Your Wallet
+                    </h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <!-- Wallet Selection Section -->
                     <div class="wallet-options">
-                        <h5 class="text-center mb-4">Choose your wallet</h5>
+                        <h5 class="text-center mb-4 text-muted">Choose your wallet</h5>
 
-                        <!-- Tonkeeper Wallet Option -->
-                        <div class="wallet-item card mb-3" data-wallet="tonkeeper">
-                            <div class="card-body text-center">
-                                <img src="{% static 'images/tonkeeper-logo.png' %}" 
-                                     alt="Tonkeeper Wallet" 
-                                     class="wallet-logo mb-3">
-                                <h5 class="card-title">Tonkeeper</h5>
-                                <p class="card-text text-muted">Secure TON blockchain wallet</p>
+                        <div class="row g-3">
+                            <!-- Tonkeeper Wallet Option -->
+                            <div class="col-md-4 col-sm-6">
+                                <div class="wallet-item card h-100" data-wallet="tonkeeper">
+                                    <div class="card-body text-center p-3">
+                                        <img src="{% static 'images/tonkeeper-logo.png' %}" 
+                                             alt="Tonkeeper Wallet" 
+                                             class="wallet-logo mb-2"
+                                             onerror="this.src='https://via.placeholder.com/80/6c63ff/ffffff?text=TON'">
+                                        <h6 class="card-title mb-1">Tonkeeper</h6>
+                                        <p class="card-text text-muted small">TON Blockchain</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MetaMask Wallet Option -->
+                            <div class="col-md-4 col-sm-6">
+                                <div class="wallet-item card h-100" data-wallet="metamask">
+                                    <div class="card-body text-center p-3">
+                                        <img src="{% static 'images/metamask-logo.png' %}" 
+                                             alt="MetaMask Wallet" 
+                                             class="wallet-logo mb-2"
+                                             onerror="this.src='https://via.placeholder.com/80/f6851b/ffffff?text=MM'">
+                                        <h6 class="card-title mb-1">MetaMask</h6>
+                                        <p class="card-text text-muted small">Ethereum & EVM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trust Wallet Option -->
+                            <div class="col-md-4 col-sm-6">
+                                <div class="wallet-item card h-100" data-wallet="trustwallet">
+                                    <div class="card-body text-center p-3">
+                                        <img src="{% static 'images/trust-wallet-logo.png' %}" 
+                                             alt="Trust Wallet" 
+                                             class="wallet-logo mb-2"
+                                             onerror="this.src='https://via.placeholder.com/80/3375BB/ffffff?text=TW'">
+                                        <h6 class="card-title mb-1">Trust Wallet</h6>
+                                        <p class="card-text text-muted small">Multi-Chain</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <!-- MetaMask Wallet Option -->
-                        <div class="wallet-item card mb-3" data-wallet="metamask">
-                            <div class="card-body text-center">
-                                <img src="{% static 'images/metamask-logo.png' %}" 
-                                     alt="MetaMask Wallet" 
-                                     class="wallet-logo mb-3">
-                                <h5 class="card-title">MetaMask</h5>
-                                <p class="card-text text-muted">Ethereum wallet browser extension</p>
-                            </div>
-                        </div>
-
-                        <!-- Trust Wallet Option -->
-                        <div class="wallet-item card mb-3" data-wallet="trustwallet">
-                            <div class="card-body text-center">
-                                <img src="{% static 'images/trust-wallet-logo.png' %}" 
-                                     alt="Trust Wallet" 
-                                     class="wallet-logo mb-3">
-                                <h5 class="card-title">Trust Wallet</h5>
-                                <p class="card-text text-muted">Multi-chain mobile wallet</p>
-                            </div>
-                        </div>
-
                     </div>
 
                     <!-- Connection Status -->
-                    <div class="connection-status mt-4 text-center">
-                        <div id="walletText" class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> Please select a wallet to connect
+                    <div class="connection-status mt-4">
+                        <div id="walletText" class="alert alert-info text-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Please select a wallet to connect
                         </div>
-                        <div id="walletAddress" class="alert alert-success d-none">
-                            <i class="fas fa-check-circle"></i> Connected: <span id="connectedAddress"></span>
+                        <div id="walletAddress" class="alert alert-success text-center d-none">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Connected: <span id="connectedAddress" class="fw-bold"></span>
+                        </div>
+                        <div id="walletError" class="alert alert-danger text-center d-none">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span id="errorMessage">Connection failed</span>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="text-center mt-4">
+                    <div class="text-center mt-4 d-flex gap-2 justify-content-center flex-wrap">
                         <button id="disconnectBtn" class="btn btn-outline-danger d-none">
-                            <i class="fas fa-plug"></i> Disconnect Wallet
+                            <i class="fas fa-plug me-2"></i>Disconnect Wallet
                         </button>
                         <a href="{% url 'marketplace:nft_list' %}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to Marketplace
+                            <i class="fas fa-arrow-left me-2"></i>Back to Marketplace
                         </a>
                     </div>
                 </div>
@@ -76,251 +93,376 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block extra_css %}
 <style>
-/* === Body & Background === */
-body {
-    background: linear-gradient(135deg, #0d0d20, #02010a, #1a0033, #000010);
-    background-size: 400% 400%;
-    animation: breatheBG 15s ease infinite;
-    min-height: 100vh;
-    color: #e0e0ff;
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
-}
-@keyframes breatheBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* === Card Glass Style === */
-.card {
-    background: rgba(20, 20, 40, 0.4);
-    border: 1px solid rgba(180, 0, 255, 0.2);
-    border-radius: 18px;
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.15), inset 0 0 15px rgba(180, 0, 255, 0.1);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    transition: all 0.4s ease;
-    z-index: 1;
-    animation: fadeIn 0.8s ease forwards;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* === Neon Header Glow === */
-.card-header h4 {
-    color: #00f6ff;
-    text-shadow:
-        0 0 5px #00f6ff,
-        0 0 10px #00f6ff,
-        0 0 20px #00f6ff,
-        0 0 40px #b400ff,
-        0 0 60px #b400ff;
-    animation: neonGlow 2s ease-in-out infinite alternate;
-}
-@keyframes neonGlow {
-    0% { text-shadow: 0 0 2px #00f6ff, 0 0 5px #00f6ff, 0 0 10px #00f6ff, 0 0 20px #b400ff, 0 0 30px #b400ff; color: #00f6ff; }
-    50% { text-shadow: 0 0 5px #00f6ff, 0 0 10px #00f6ff, 0 0 20px #00f6ff, 0 0 40px #b400ff, 0 0 60px #b400ff; color: #00f6ff; }
-    100% { text-shadow: 0 0 8px #00f6ff, 0 0 15px #00f6ff, 0 0 25px #00f6ff, 0 0 50px #b400ff, 0 0 80px #b400ff; color: #b400ff; }
-}
-
-/* === Wallet Card Styles === */
+/* === Wallet Item Styles === */
 .wallet-item {
-    background: rgba(255,255,255,0.05);
-    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    background: var(--bg-card, #1e1e1e);
+    border-radius: var(--radius-md, 12px);
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(10px);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    flex: 1 1 200px;
-    max-width: 250px;
 }
-.wallet-item::before {
-    content: '';
-    position: absolute;
-    top: -2px; left: -2px; right: -2px; bottom: -2px;
-    border-radius: 16px;
-    padding: 2px;
-    background: conic-gradient(from 0deg, #00f6ff, #b400ff, #00f6ff, #b400ff);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-    opacity: 0.6;
-    animation: rotateBorder 4s linear infinite;
-    z-index: 0;
-}
-@keyframes rotateBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .wallet-item:hover {
-    transform: translateY(-8px) scale(1.04);
-    box-shadow: 0 0 25px rgba(0,255,255,0.5), 0 0 40px rgba(180,0,255,0.35);
-    background: rgba(255,255,255,0.12);
+    transform: translateY(-5px);
+    border-color: var(--accent-color, #6c63ff);
+    box-shadow: 0 8px 25px rgba(108, 99, 255, 0.3);
 }
 
-/* === Wallet Logo Styles (Responsive & Neon) === */
+.wallet-item:active {
+    transform: scale(0.95);
+}
+
+.wallet-item.selected {
+    border-color: var(--accent-color, #6c63ff);
+    background: rgba(108, 99, 255, 0.1);
+    box-shadow: 0 0 30px rgba(108, 99, 255, 0.2);
+}
+
+/* Wallet Logo */
 .wallet-logo {
-    width: 80px;
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto 15px;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
     border-radius: 50%;
     padding: 5px;
     background: rgba(255,255,255,0.05);
-    box-shadow: 0 0 12px rgba(0,255,255,0.6), 0 0 20px rgba(180,0,255,0.4);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-.wallet-item:hover .wallet-logo {
-    transform: scale(1.15);
-    filter: drop-shadow(0 0 18px rgba(180,0,255,0.9));
-}
-
-/* === Wallet Cards Flex Layout === */
-.wallet-options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
-}
-
-/* === Connection Status === */
-.connection-status { min-height: 80px; }
-.alert {
-    border-radius: 10px;
-    backdrop-filter: blur(6px);
-    background: rgba(0,0,20,0.4);
-    border: 1px solid rgba(0,255,255,0.25);
-    color: #ccf;
-}
-
-/* === Buttons Neon Glow === */
-.btn {
-    border-radius: 12px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
     transition: all 0.3s ease;
 }
-.btn::before {
-    content: '';
-    position: absolute;
-    top: -2px; left: -2px; right: -2px; bottom: -2px;
-    border-radius: 12px;
-    padding: 2px;
-    background: conic-gradient(from 0deg, #00f6ff, #b400ff, #00f6ff, #b400ff);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-    opacity: 0.5;
-    animation: rotateBorder 4s linear infinite;
-    z-index: -1;
+
+.wallet-item:hover .wallet-logo {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px rgba(108, 99, 255, 0.5));
 }
-.btn:hover { color: #fff !important; box-shadow: 0 0 15px rgba(0,255,255,0.6), 0 0 25px rgba(180,0,255,0.4); }
-.btn-secondary { background-color: transparent; border: 1px solid rgba(0,255,255,0.5); color: #00f6ff; }
-.btn-secondary:hover { background: linear-gradient(90deg, #00f6ff, #b400ff); }
-.btn-outline-danger { color: #ff0040; border-color: rgba(255,0,64,0.5); }
-.btn-outline-danger:hover { background: linear-gradient(90deg, rgba(255,0,64,0.6), rgba(180,0,255,0.4)); box-shadow: 0 0 15px rgba(255,0,64,0.6); }
 
-/* === Responsive Wallet Logos === */
-@media (max-width: 768px) { .wallet-logo { width: 60px; height: 60px; } }
-@media (max-width: 480px) { .wallet-logo { width: 50px; height: 50px; } }
+/* Card Title */
+.wallet-item .card-title {
+    font-weight: 600;
+    color: var(--text-primary, #ffffff);
+    font-size: 0.95rem;
+}
 
+.wallet-item .card-text {
+    font-size: 0.75rem;
+    color: var(--text-muted, #6c757d);
+}
+
+/* Connection Status */
+.connection-status {
+    min-height: 80px;
+}
+
+.alert {
+    border-radius: var(--radius-sm, 8px);
+    backdrop-filter: blur(6px);
+    padding: 12px 20px;
+    margin-bottom: 0;
+}
+
+#walletAddress .fw-bold {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Loading Spinner for wallet connection */
+.wallet-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: var(--accent-color, #6c63ff);
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Buttons */
+.btn {
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary {
+    background: var(--bg-card-hover, #2a2a2a);
+    border-color: var(--border-color, #2d2d2d);
+    color: var(--text-primary, #ffffff);
+}
+
+.btn-secondary:hover {
+    background: var(--accent-color, #6c63ff);
+    border-color: var(--accent-color, #6c63ff);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+}
+
+.btn-outline-danger {
+    color: var(--danger-color, #dc3545);
+    border-color: var(--danger-color, #dc3545);
+}
+
+.btn-outline-danger:hover {
+    background: var(--danger-color, #dc3545);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .wallet-logo {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .wallet-item .card-title {
+        font-size: 0.85rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .wallet-logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .wallet-item .card-title {
+        font-size: 0.8rem;
+    }
+    
+    .wallet-item .card-text {
+        font-size: 0.65rem;
+    }
+    
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.4rem 1rem;
+    }
+    
+    #walletAddress .fw-bold {
+        font-size: 0.75rem;
+    }
+}
+
+/* Dark/Light Theme Support */
+body.light-theme .wallet-item {
+    background: #ffffff;
+    border-color: #e0e0e0;
+}
+
+body.light-theme .wallet-item:hover {
+    border-color: var(--accent-color, #6c63ff);
+    box-shadow: 0 8px 25px rgba(108, 99, 255, 0.15);
+}
+
+body.light-theme .wallet-item.selected {
+    background: rgba(108, 99, 255, 0.05);
+}
+
+/* Animation for card appearance */
+.wallet-item {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+.wallet-item:nth-child(1) { animation-delay: 0.1s; }
+.wallet-item:nth-child(2) { animation-delay: 0.2s; }
+.wallet-item:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Toast notification for connection */
+.wallet-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    animation: slideInRight 0.5s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
 </style>
 {% endblock %}
 
-
+{% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
     const walletText = document.getElementById('walletText');
     const walletAddress = document.getElementById('walletAddress');
+    const walletError = document.getElementById('walletError');
+    const errorMessage = document.getElementById('errorMessage');
     const connectedAddress = document.getElementById('connectedAddress');
     const disconnectBtn = document.getElementById('disconnectBtn');
     const walletItems = document.querySelectorAll('.wallet-item');
+
+    let currentWallet = null;
 
     // Handle wallet selection
     walletItems.forEach(item => {
         item.addEventListener('click', function() {
             const walletType = this.getAttribute('data-wallet');
+            // Remove selected class from all
+            walletItems.forEach(w => w.classList.remove('selected'));
+            // Add selected class to clicked
+            this.classList.add('selected');
+            // Connect wallet
             connectWallet(walletType);
         });
     });
 
     function connectWallet(walletType) {
-        walletText.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Connecting to ${walletType}...`;
-        
+        // Show loading state
+        walletText.classList.remove('d-none');
+        walletAddress.classList.add('d-none');
+        walletError.classList.add('d-none');
+        walletText.innerHTML = `
+            <div class="d-flex align-items-center justify-content-center">
+                <span class="wallet-loading me-2"></span>
+                Connecting to ${walletType.charAt(0).toUpperCase() + walletType.slice(1)}...
+            </div>
+        `;
+
+        // Simulate connection process
         setTimeout(() => {
-            switch(walletType) {
-                case 'tonkeeper':
-                    simulateTonkeeperConnection();
-                    break;
-                case 'metamask':
-                    simulateMetaMaskConnection();
-                    break;
-                case 'trustwallet':
-                    simulateTrustWalletConnection();
-                    break;
-                default:
-                    walletText.innerHTML = `<i class="fas fa-times-circle"></i> Wallet not supported`;
+            try {
+                let address = '';
+                switch(walletType) {
+                    case 'tonkeeper':
+                        address = generateTonAddress();
+                        break;
+                    case 'metamask':
+                        address = generateEthAddress();
+                        break;
+                    case 'trustwallet':
+                        address = generateBscAddress();
+                        break;
+                    default:
+                        throw new Error('Wallet not supported');
+                }
+
+                // Connection successful
+                walletText.classList.add('d-none');
+                walletAddress.classList.remove('d-none');
+                connectedAddress.textContent = address;
+                disconnectBtn.classList.remove('d-none');
+                currentWallet = walletType;
+
+                // Store in localStorage
+                localStorage.setItem('connectedWallet', walletType);
+                localStorage.setItem('walletAddress', address);
+
+                // Show success toast
+                showToast('Wallet connected successfully!', 'success');
+
+            } catch (error) {
+                // Connection failed
+                walletText.classList.add('d-none');
+                walletError.classList.remove('d-none');
+                errorMessage.textContent = error.message || 'Connection failed. Please try again.';
+                showToast(error.message || 'Connection failed', 'danger');
             }
         }, 2000);
     }
 
-    // Tonkeeper connection 
-    function simulateTonkeeperConnection() {
-        const fakeAddress = "EQD...TonkeeperAddress123";
-        walletText.classList.add('d-none');
-        walletAddress.classList.remove('d-none');
-        connectedAddress.textContent = fakeAddress;
-        disconnectBtn.classList.remove('d-none');
-        
-        // Store connection in localStorage
-        localStorage.setItem('connectedWallet', 'tonkeeper');
-        localStorage.setItem('walletAddress', fakeAddress);
+    // Generate fake addresses for demo
+    function generateTonAddress() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let address = 'EQD';
+        for (let i = 0; i < 32; i++) {
+            address += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return address;
     }
 
-    function simulateMetaMaskConnection() {
-        const fakeAddress = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
-        walletText.classList.add('d-none');
-        walletAddress.classList.remove('d-none');
-        connectedAddress.textContent = fakeAddress;
-        disconnectBtn.classList.remove('d-none');
-        
-        localStorage.setItem('connectedWallet', 'metamask');
-        localStorage.setItem('walletAddress', fakeAddress);
+    function generateEthAddress() {
+        const chars = '0123456789abcdef';
+        let address = '0x';
+        for (let i = 0; i < 40; i++) {
+            address += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return address;
     }
 
-    function simulateTrustWalletConnection() {
-        const fakeAddress = "bnb136ns6lfw4zs5hg4n85vdthaad7hq5m4gtkgf23";
-        walletText.classList.add('d-none');
-        walletAddress.classList.remove('d-none');
-        connectedAddress.textContent = fakeAddress;
-        disconnectBtn.classList.remove('d-none');
-        
-        localStorage.setItem('connectedWallet', 'trustwallet');
-        localStorage.setItem('walletAddress', fakeAddress);
+    function generateBscAddress() {
+        const chars = '0123456789abcdef';
+        let address = '0x';
+        for (let i = 0; i < 40; i++) {
+            address += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return address;
     }
 
+    // Disconnect wallet
     disconnectBtn.addEventListener('click', function() {
         localStorage.removeItem('connectedWallet');
         localStorage.removeItem('walletAddress');
         walletAddress.classList.add('d-none');
         disconnectBtn.classList.add('d-none');
+        walletError.classList.add('d-none');
         walletText.classList.remove('d-none');
-        walletText.innerHTML = '<i class="fas fa-info-circle"></i> Wallet disconnected. Please select a wallet to connect';
+        walletText.innerHTML = '<i class="fas fa-info-circle me-2"></i>Wallet disconnected. Please select a wallet to connect';
+        currentWallet = null;
+        walletItems.forEach(w => w.classList.remove('selected'));
+        showToast('Wallet disconnected', 'info');
     });
+
+    // Show toast notification
+    function showToast(message, type = 'info') {
+        const existingToast = document.querySelector('.wallet-toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `wallet-toast alert alert-${type} shadow-lg`;
+        toast.role = 'alert';
+        toast.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'danger' ? 'fa-exclamation-circle' : 'fa-info-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        document.body.appendChild(toast);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 5000);
+    }
 
     // Check if already connected
     const connectedWallet = localStorage.getItem('connectedWallet');
@@ -330,7 +472,15 @@ document.addEventListener('DOMContentLoaded', function() {
         walletAddress.classList.remove('d-none');
         connectedAddress.textContent = address;
         disconnectBtn.classList.remove('d-none');
+        currentWallet = connectedWallet;
+        
+        // Highlight selected wallet
+        walletItems.forEach(item => {
+            if (item.getAttribute('data-wallet') === connectedWallet) {
+                item.classList.add('selected');
+            }
+        });
     }
 });
 </script>
-
+{% endblock %}

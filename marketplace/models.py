@@ -3,7 +3,11 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator , MaxValueValidator
+from django.core.exceptions import ValidationError
+import uuid
+from decimal import Decimal
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -198,6 +202,26 @@ class Transaction(models.Model):
         if self.completed_at and self.created_at:
             return self.completed_at - self.created_at
         return None
+
+    @property
+
+    def is_on_sale(self):
+        return self.discount_percentage > 0 and self.is_discount_active
+
+    def is_discount_active(self):
+        if self.discount_start and self.discount_end:
+
+            now =  timezone.now()
+            return self.discount_start <= now <= self.discount_end
+        elif self.discount_start:
+            return timezone.now() >= self.discount_start
+        elif self.dicount_end:
+            return timezone.now() <= self.discount_end
+        return False
+
+
+
+    
 
     def __str__(self):
         if self.nft:
